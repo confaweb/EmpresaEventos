@@ -2,7 +2,11 @@ package ar.edu.unlam.eventos;
 
 import java.util.Objects;
 
-public abstract class Persona implements Comparable<Integer>{
+import ar.edu.unlam.eventos.interfaces.Cliente;
+import ar.edu.unlam.eventos.interfaces.Expositor;
+import ar.edu.unlam.eventos.interfaces.Participante;
+
+public  class Persona implements Comparable<Persona>,Cliente,Expositor,Participante{
 	private Integer dni;
 	private String nombre;
 	private String apellido;
@@ -29,7 +33,9 @@ public abstract class Persona implements Comparable<Integer>{
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
-	public abstract Boolean  add(Persona cliente) ;
+	public Boolean  add(Persona cliente) {
+		return null;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(dni);
@@ -47,8 +53,8 @@ public abstract class Persona implements Comparable<Integer>{
 	}
 	
 	@Override
-	public int compareTo(Integer o) {		
-		return this.dni.compareTo(o);
+	public int compareTo(Persona o) {		
+		return this.apellido.compareTo(o.getApellido());
 	}
 	@Override
 	public String toString() {
