@@ -11,10 +11,13 @@ import ar.edu.unlam.eventos.Empresa;
 import ar.edu.unlam.eventos.Evento;
 import ar.edu.unlam.eventos.Persona;
 import ar.edu.unlam.eventos.enums.Sala;
+import ar.edu.unlam.eventos.exceptions.CupoLlenoException;
 import ar.edu.unlam.eventos.exceptions.EventoDuplicadoException;
 import ar.edu.unlam.eventos.exceptions.EventoInexistenteException;
+import ar.edu.unlam.eventos.exceptions.ParticipanteNoEsClienteException;
 import ar.edu.unlam.eventos.interfaces.Cliente;
 import ar.edu.unlam.eventos.interfaces.Expositor;
+import ar.edu.unlam.eventos.interfaces.Participante;
 
 public class PruebaEventos {
 
@@ -58,7 +61,8 @@ public class PruebaEventos {
 	}
 
 	@Test // #3
-	public void dadoQueExisteUnaEmpresaConEventosCuandoBuscoUnEventoExistentePorSuCodigoObtengoElEvento() throws EventoDuplicadoException,EventoInexistenteException  {
+	public void dadoQueExisteUnaEmpresaConEventosCuandoBuscoUnEventoExistentePorSuCodigoObtengoElEvento()
+			throws EventoDuplicadoException, EventoInexistenteException {
 		// INICIO
 		Empresa empresa;
 		Expositor expositor;
@@ -74,14 +78,36 @@ public class PruebaEventos {
 		empresa = new Empresa(cuit, nombreEmpresa);
 
 		assertTrue(empresa.agregarEvento(evento));
+		
 
 		// VALIDACION
-		assertEquals(empresa.buscarEventoPorCodigo(codigoEvento),evento);
+		assertEquals(empresa.buscarEventoPorCodigo(codigoEvento), evento);
 	}
 
 	@Test // #4
-	public void dadoQueExisteUnaEmpresaConEventosCuandoVerificoSiUnClienteSeEncuentraEntreLosParticipantesDeUnEventoPorClienteYExisteObtengoUnResultadoPositivo() {
+	public void dadoQueExisteUnaEmpresaConEventosCuandoVerificoSiUnClienteSeEncuentraEntreLosParticipantesDeUnEventoPorClienteYExisteObtengoUnResultadoPositivo() throws EventoDuplicadoException, EventoInexistenteException,CupoLlenoException, ParticipanteNoEsClienteException {
+		// INICIO
+		Empresa empresa;
+		Cliente cliente;
+		Participante participante;
+		Evento evento;
+		Integer cuit = 110202023, dni = 111111;
+		String nombreEmpresa = "Janos", nombre = "jose", apellido = "Lopez", codigoEvento = "Conf001",
+				nombreEvento = "Marcianos";
+		LocalDate fechaEvento = LocalDate.of(2024, 12, 12);
+		Sala sala = Sala.GRANDE;
+		// PREPARACION
+		cliente =new Persona (dni,nombre,apellido);
+		participante = new Persona(dni, nombre, apellido);
+		evento = new Conferencia(codigoEvento, fechaEvento, nombreEvento, sala, (Persona) participante);
+		empresa = new Empresa(cuit, nombreEmpresa);
 
+		assertTrue(empresa.agregarEvento(evento));
+		//assertTrue (empresa.agregarCliente((Persona) cliente));
+		assertTrue (evento.agregarParticipante(participante));
+
+		// VALIDACION
+		assertTrue(evento.buscarClienteEnEventoPorParticipante(participante));
 	}
 
 	@Test // #5

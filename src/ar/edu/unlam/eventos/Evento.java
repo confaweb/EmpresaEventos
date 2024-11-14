@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import ar.edu.unlam.eventos.enums.Sala;
+import ar.edu.unlam.eventos.exceptions.CupoLlenoException;
+import ar.edu.unlam.eventos.exceptions.ParticipanteNoEsClienteException;
 import ar.edu.unlam.eventos.interfaces.Participante;
 
 public abstract class Evento implements Comparable<Evento> {
@@ -72,6 +74,7 @@ public abstract class Evento implements Comparable<Evento> {
 	public void setParticipantes(Set<Participante> participantes) {
 		this.participantes = participantes;
 	}
+	public abstract boolean agregarParticipante(Participante participante) throws CupoLlenoException, ParticipanteNoEsClienteException;
 
 	@Override
 	public int hashCode() {
@@ -95,6 +98,10 @@ public abstract class Evento implements Comparable<Evento> {
 		// TODO Auto-generated method stub
 		return this.getCodigoEvento().compareTo(evento.getCodigoEvento());
 	}
+
+	public abstract boolean buscarClienteEnEventoPorParticipante(Participante participante) throws ParticipanteNoEsClienteException;
+
+	
 
 
 }

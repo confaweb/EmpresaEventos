@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import ar.edu.unlam.eventos.exceptions.EventoDuplicadoException;
 import ar.edu.unlam.eventos.exceptions.EventoInexistenteException;
 import ar.edu.unlam.eventos.interfaces.Cliente;
+import ar.edu.unlam.eventos.interfaces.Participante;
 
 public class Empresa {
 
@@ -83,5 +84,7 @@ public class Empresa {
 			throw new EventoDuplicadoException("El Evento ya existe");
 		return eventoAgregado;
 	}
+
+	
 
 }
