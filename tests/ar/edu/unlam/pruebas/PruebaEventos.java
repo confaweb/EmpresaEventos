@@ -14,6 +14,7 @@ import ar.edu.unlam.eventos.exceptions.CupoLlenoException;
 import ar.edu.unlam.eventos.exceptions.EventoDuplicadoException;
 import ar.edu.unlam.eventos.exceptions.EventoInexistenteException;
 import ar.edu.unlam.eventos.exceptions.ParticipanteNoEsClienteException;
+import ar.edu.unlam.eventos.exceptions.ParticipanteNoPerteneceAlEventoException;
 import ar.edu.unlam.eventos.interfaces.Cliente;
 import ar.edu.unlam.eventos.interfaces.Conferencia;
 import ar.edu.unlam.eventos.interfaces.Expositor;
@@ -85,7 +86,7 @@ public class PruebaEventos {
 	}
 
 	@Test // #4
-	public void dadoQueExisteUnaEmpresaConEventosCuandoVerificoSiUnClienteSeEncuentraEntreLosParticipantesDeUnEventoPorClienteYExisteObtengoUnResultadoPositivo() throws EventoDuplicadoException, EventoInexistenteException,CupoLlenoException, ParticipanteNoEsClienteException {
+	public void dadoQueExisteUnaEmpresaConEventosCuandoVerificoSiUnClienteSeEncuentraEntreLosParticipantesDeUnEventoPorClienteYExisteObtengoUnResultadoPositivo() throws EventoDuplicadoException, EventoInexistenteException,CupoLlenoException, ParticipanteNoEsClienteException, ParticipanteNoPerteneceAlEventoException {
 		// INICIO
 		Empresa empresa;
 		Cliente cliente;
@@ -105,7 +106,7 @@ public class PruebaEventos {
 		evento.setCupoParticipantesConferencia(cupoParticipantes);
 		assertTrue(empresa.agregarEvento(evento));
 		assertTrue (empresa.agregarCliente((Persona) cliente));
-		assertTrue (evento.agregarParticipante(participante));
+		assertTrue (evento.agregarParticipante(participante, empresa));
 
 		// VALIDACION
 		assertTrue(evento.buscarClienteEnEventoPorParticipante(participante));

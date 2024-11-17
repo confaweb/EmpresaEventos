@@ -7,9 +7,9 @@ import java.util.TreeSet;
 
 import ar.edu.unlam.eventos.exceptions.EventoDuplicadoException;
 import ar.edu.unlam.eventos.exceptions.EventoInexistenteException;
-import ar.edu.unlam.eventos.interfaces.Cliente;
 import ar.edu.unlam.eventos.interfaces.Conferencia;
-import ar.edu.unlam.eventos.interfaces.Participante;
+
+
 
 public class Empresa {
 
@@ -39,6 +39,20 @@ public class Empresa {
 
 	public void setNommbreEmpresa(String nommbreEmpresa) {
 		this.nommbreEmpresa = nommbreEmpresa;
+	}
+
+	/**
+	 * @return the clientes
+	 */
+	public Set<Persona> getClientes() {
+		return clientes;
+	}
+
+	/**
+	 * @param clientes the clientes to set
+	 */
+	public void setClientes(Set<Persona> clientes) {
+		this.clientes = clientes;
 	}
 
 	public Boolean agregarCliente(Persona cliente) {

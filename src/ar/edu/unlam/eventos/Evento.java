@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import ar.edu.unlam.eventos.enums.Sala;
 import ar.edu.unlam.eventos.exceptions.CupoLlenoException;
 import ar.edu.unlam.eventos.exceptions.ParticipanteNoEsClienteException;
+import ar.edu.unlam.eventos.exceptions.ParticipanteNoPerteneceAlEventoException;
 import ar.edu.unlam.eventos.interfaces.Cliente;
 import ar.edu.unlam.eventos.interfaces.Conferencia;
 import ar.edu.unlam.eventos.interfaces.Participante;
@@ -105,9 +106,9 @@ public  class Evento implements Comparable<Evento>,Conferencia {
 	}
 
 	@Override
-	public boolean agregarParticipante(Participante participante)
+	public boolean agregarParticipante(Participante participante,Empresa empresa)
 			throws CupoLlenoException, ParticipanteNoEsClienteException {
-		if (!(participante instanceof Cliente))
+		if (!(empresa.getClientes().contains(participante)))
 			throw new ParticipanteNoEsClienteException(
 					"Debe hacer cliente al participante para poder agregarlo al evento");
 
@@ -120,15 +121,14 @@ public  class Evento implements Comparable<Evento>,Conferencia {
 
 	}
 	@Override
-	public boolean buscarClienteEnEventoPorParticipante(Participante participante)
-			throws ParticipanteNoEsClienteException {
-		Boolean clienteEncontrado = false;
-		if (!(participante instanceof Cliente))
-			throw new ParticipanteNoEsClienteException(
-					"Debe hacer cliente al participante para poder agregarlo al evento");
-		clienteEncontrado = true;
+	public boolean buscarClienteEnEventoPorParticipante(Participante participante) throws ParticipanteNoPerteneceAlEventoException {
+		Boolean participanteEncontrado = false;
+		if (!(participantes.contains(participante)))
+			throw new ParticipanteNoPerteneceAlEventoException();
+			
+		participanteEncontrado = true;
 
-		return clienteEncontrado;
+		return participanteEncontrado;
 	}
 	@Override
 	public void setPrecioconferencia(Double precioConferencia) {
@@ -159,6 +159,8 @@ public  class Evento implements Comparable<Evento>,Conferencia {
 		// TODO Auto-generated method stub
 		return this.getCodigoEvento().compareTo(evento.getCodigoEvento());
 	}
+
+	
 
 	
 	
