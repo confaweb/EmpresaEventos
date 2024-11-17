@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import ar.edu.unlam.eventos.exceptions.EventoDuplicadoException;
 import ar.edu.unlam.eventos.exceptions.EventoInexistenteException;
 import ar.edu.unlam.eventos.interfaces.Cliente;
+import ar.edu.unlam.eventos.interfaces.Conferencia;
 import ar.edu.unlam.eventos.interfaces.Participante;
 
 public class Empresa {
@@ -21,7 +22,7 @@ public class Empresa {
 		this.cuit = cuit;
 		this.nommbreEmpresa = nombreEmpresa;
 		clientes = new TreeSet<Persona>();
-		listadoEventos=new HashSet<>();
+		listadoEventos=new HashSet<Evento>();
 	}
 
 	public Integer getCuit() {
@@ -77,9 +78,9 @@ public class Empresa {
 		return "Empresa [cuit=" + cuit + ", nommbreEmpresa=" + nommbreEmpresa + "]";
 	}
 
-	public boolean agregarEvento(Evento evento) throws EventoDuplicadoException {
+	public boolean agregarEvento(Conferencia evento) throws EventoDuplicadoException {
 		
-		Boolean eventoAgregado=listadoEventos.add(evento);
+		Boolean eventoAgregado=listadoEventos.add((Evento) evento);
 		if(!eventoAgregado)
 			throw new EventoDuplicadoException("El Evento ya existe");
 		return eventoAgregado;

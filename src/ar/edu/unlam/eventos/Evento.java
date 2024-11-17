@@ -8,15 +8,21 @@ import java.util.TreeSet;
 import ar.edu.unlam.eventos.enums.Sala;
 import ar.edu.unlam.eventos.exceptions.CupoLlenoException;
 import ar.edu.unlam.eventos.exceptions.ParticipanteNoEsClienteException;
+import ar.edu.unlam.eventos.interfaces.Cliente;
+import ar.edu.unlam.eventos.interfaces.Conferencia;
 import ar.edu.unlam.eventos.interfaces.Participante;
 
-public abstract class Evento implements Comparable<Evento> {
+public  class Evento implements Comparable<Evento>,Conferencia {
+	
+	private Integer cupoParticipantes;
+	private Double precio;
 	private String codigoEvento;
 	private LocalDate fechaEvento;
 	private String nombreEvento;
 	private Sala sala;
 	private Persona expositor;
 	private Set <Participante>participantes;
+	
 
 	public Evento(String codigoEvento, LocalDate fechaEvento, String nombreEvento, Sala sala, Persona expositor) {
 		this.codigoEvento=codigoEvento;
@@ -74,7 +80,62 @@ public abstract class Evento implements Comparable<Evento> {
 	public void setParticipantes(Set<Participante> participantes) {
 		this.participantes = participantes;
 	}
-	public abstract boolean agregarParticipante(Participante participante) throws CupoLlenoException, ParticipanteNoEsClienteException;
+	public Integer getCupoParticipantes() {
+		return cupoParticipantes;
+	}
+	@ Override
+	public void setCupoParticipantesConferencia(Integer cupo) {
+		this.cupoParticipantes = cupo;
+	}
+
+	
+
+	/**
+	 * @return the precio
+	 */
+	public Double getPrecio() {
+		return precio;
+	}
+
+	/**
+	 * @param precio the precio to set
+	 */
+	public void setPrecio(Double precio) {
+		this.precio = precio;
+	}
+
+	@Override
+	public boolean agregarParticipante(Participante participante)
+			throws CupoLlenoException, ParticipanteNoEsClienteException {
+		if (!(participante instanceof Cliente))
+			throw new ParticipanteNoEsClienteException(
+					"Debe hacer cliente al participante para poder agregarlo al evento");
+
+		if (this.participantes.size() < this.cupoParticipantes) {
+			Boolean participanteAgregado = this.participantes.add(participante);
+			return participanteAgregado;
+		}
+
+		throw new CupoLlenoException("Cupo lleno");
+
+	}
+	@Override
+	public boolean buscarClienteEnEventoPorParticipante(Participante participante)
+			throws ParticipanteNoEsClienteException {
+		Boolean clienteEncontrado = false;
+		if (!(participante instanceof Cliente))
+			throw new ParticipanteNoEsClienteException(
+					"Debe hacer cliente al participante para poder agregarlo al evento");
+		clienteEncontrado = true;
+
+		return clienteEncontrado;
+	}
+	@Override
+	public void setPrecioconferencia(Double precioConferencia) {
+		this.precio=precioConferencia;
+		
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -99,8 +160,7 @@ public abstract class Evento implements Comparable<Evento> {
 		return this.getCodigoEvento().compareTo(evento.getCodigoEvento());
 	}
 
-	public abstract boolean buscarClienteEnEventoPorParticipante(Participante participante) throws ParticipanteNoEsClienteException;
-
+	
 	
 
 

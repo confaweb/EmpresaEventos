@@ -6,7 +6,6 @@ import java.time.LocalDate;
 
 import org.junit.Test;
 
-import ar.edu.unlam.eventos.Conferencia;
 import ar.edu.unlam.eventos.Empresa;
 import ar.edu.unlam.eventos.Evento;
 import ar.edu.unlam.eventos.Persona;
@@ -16,6 +15,7 @@ import ar.edu.unlam.eventos.exceptions.EventoDuplicadoException;
 import ar.edu.unlam.eventos.exceptions.EventoInexistenteException;
 import ar.edu.unlam.eventos.exceptions.ParticipanteNoEsClienteException;
 import ar.edu.unlam.eventos.interfaces.Cliente;
+import ar.edu.unlam.eventos.interfaces.Conferencia;
 import ar.edu.unlam.eventos.interfaces.Expositor;
 import ar.edu.unlam.eventos.interfaces.Participante;
 
@@ -43,7 +43,7 @@ public class PruebaEventos {
 		// INICIO
 		Empresa empresa;
 		Expositor expositor;
-		Evento evento;
+		Conferencia evento;
 		Integer cuit = 110202023, dni = 111111;
 		String nombreEmpresa = "Janos", nombre = "jose", apellido = "Lopez", codigoEvento = "Conf001",
 				nombreEvento = "Marcianos";
@@ -51,7 +51,7 @@ public class PruebaEventos {
 		Sala sala = Sala.GRANDE;
 		// PREPARACION
 		expositor = new Persona(dni, nombre, apellido);
-		evento = new Conferencia(codigoEvento, fechaEvento, nombreEvento, sala, (Persona) expositor);
+		evento = new Evento(codigoEvento, fechaEvento, nombreEvento, sala, (Persona) expositor);
 		empresa = new Empresa(cuit, nombreEmpresa);
 
 		assertTrue(empresa.agregarEvento(evento));
@@ -66,7 +66,7 @@ public class PruebaEventos {
 		// INICIO
 		Empresa empresa;
 		Expositor expositor;
-		Evento evento;
+		Conferencia evento;
 		Integer cuit = 110202023, dni = 111111;
 		String nombreEmpresa = "Janos", nombre = "jose", apellido = "Lopez", codigoEvento = "Conf001",
 				nombreEvento = "Marcianos";
@@ -74,7 +74,7 @@ public class PruebaEventos {
 		Sala sala = Sala.GRANDE;
 		// PREPARACION
 		expositor = new Persona(dni, nombre, apellido);
-		evento = new Conferencia(codigoEvento, fechaEvento, nombreEvento, sala, (Persona) expositor);
+		evento = new Evento(codigoEvento, fechaEvento, nombreEvento, sala, (Persona) expositor);
 		empresa = new Empresa(cuit, nombreEmpresa);
 
 		assertTrue(empresa.agregarEvento(evento));
@@ -90,8 +90,8 @@ public class PruebaEventos {
 		Empresa empresa;
 		Cliente cliente;
 		Participante participante;
-		Evento evento;
-		Integer cuit = 110202023, dni = 111111;
+		Conferencia evento;
+		Integer cuit = 110202023, dni = 111111,cupoParticipantes=50;
 		String nombreEmpresa = "Janos", nombre = "jose", apellido = "Lopez", codigoEvento = "Conf001",
 				nombreEvento = "Marcianos";
 		LocalDate fechaEvento = LocalDate.of(2024, 12, 12);
@@ -99,11 +99,12 @@ public class PruebaEventos {
 		// PREPARACION
 		cliente =new Persona (dni,nombre,apellido);
 		participante = new Persona(dni, nombre, apellido);
-		evento = new Conferencia(codigoEvento, fechaEvento, nombreEvento, sala, (Persona) participante);
+		evento = new Evento(codigoEvento, fechaEvento, nombreEvento, sala, (Persona) participante);
 		empresa = new Empresa(cuit, nombreEmpresa);
-
+		
+		evento.setCupoParticipantesConferencia(cupoParticipantes);
 		assertTrue(empresa.agregarEvento(evento));
-		//assertTrue (empresa.agregarCliente((Persona) cliente));
+		assertTrue (empresa.agregarCliente((Persona) cliente));
 		assertTrue (evento.agregarParticipante(participante));
 
 		// VALIDACION
