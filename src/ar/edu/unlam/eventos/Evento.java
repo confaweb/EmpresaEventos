@@ -6,7 +6,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import ar.edu.unlam.eventos.enums.Sala;
+import ar.edu.unlam.eventos.exceptions.ClienteYaExisteEnEventoException;
 import ar.edu.unlam.eventos.exceptions.CupoLlenoException;
+import ar.edu.unlam.eventos.exceptions.EventoDuplicadoException;
 import ar.edu.unlam.eventos.exceptions.ParticipanteNoEsClienteException;
 import ar.edu.unlam.eventos.exceptions.ParticipanteNoPerteneceAlEventoException;
 import ar.edu.unlam.eventos.interfaces.Cliente;
@@ -107,12 +109,14 @@ public  class Evento implements Comparable<Evento>,Conferencia {
 
 	@Override
 	public boolean agregarParticipante(Participante participante,Empresa empresa)
-			throws CupoLlenoException, ParticipanteNoEsClienteException {
+			throws CupoLlenoException, ParticipanteNoEsClienteException, EventoDuplicadoException, ClienteYaExisteEnEventoException {
 		if (!(empresa.getClientes().contains(participante)))
 			throw new ParticipanteNoEsClienteException(
 					"Debe hacer cliente al participante para poder agregarlo al evento");
+		if(participantes.contains(participante))
+			throw new ClienteYaExisteEnEventoException();
 
-		if (this.participantes.size() < this.cupoParticipantes) {
+		if (this.participantes.size() < this.cupoParticipantes&& empresa.getListadoEventos().contains(this)) {
 			Boolean participanteAgregado = this.participantes.add(participante);
 			return participanteAgregado;
 		}

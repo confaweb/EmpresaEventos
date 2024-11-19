@@ -5,11 +5,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
+import ar.edu.unlam.eventos.exceptions.ClienteYaExisteEnEventoException;
 import ar.edu.unlam.eventos.exceptions.EventoDuplicadoException;
 import ar.edu.unlam.eventos.exceptions.EventoInexistenteException;
 import ar.edu.unlam.eventos.interfaces.Conferencia;
-
-
 
 public class Empresa {
 
@@ -22,7 +21,7 @@ public class Empresa {
 		this.cuit = cuit;
 		this.nommbreEmpresa = nombreEmpresa;
 		clientes = new TreeSet<Persona>();
-		listadoEventos=new HashSet<Evento>();
+		listadoEventos = new HashSet<Evento>();
 	}
 
 	public Integer getCuit() {
@@ -49,21 +48,37 @@ public class Empresa {
 	}
 
 	/**
+	 * @return the listadoEventos
+	 */
+	public Set<Evento> getListadoEventos() {
+		return listadoEventos;
+	}
+
+	/**
+	 * @param listadoEventos the listadoEventos to set
+	 */
+	public void setListadoEventos(Set<Evento> listadoEventos) {
+		this.listadoEventos = listadoEventos;
+	}
+
+	/**
 	 * @param clientes the clientes to set
 	 */
 	public void setClientes(Set<Persona> clientes) {
 		this.clientes = clientes;
 	}
 
-	public Boolean agregarCliente(Persona cliente) {
+	public Boolean agregarCliente(Persona cliente)  {
 		Boolean clienteAgregado = false;
+		
 
 		clienteAgregado = clientes.add(cliente);
 
 		return clienteAgregado;
 	}
+
 	public Evento buscarEventoPorCodigo(String codigoEvento) throws EventoInexistenteException {
-		for (Evento evento:listadoEventos) {
+		for (Evento evento : listadoEventos) {
 			if (evento.getCodigoEvento().equals(codigoEvento))
 				return evento;
 		}
@@ -93,13 +108,11 @@ public class Empresa {
 	}
 
 	public boolean agregarEvento(Conferencia evento) throws EventoDuplicadoException {
-		
-		Boolean eventoAgregado=listadoEventos.add((Evento) evento);
-		if(!eventoAgregado)
+
+		Boolean eventoAgregado = listadoEventos.add((Evento) evento);
+		if (!eventoAgregado)
 			throw new EventoDuplicadoException("El Evento ya existe");
 		return eventoAgregado;
 	}
-
-	
 
 }

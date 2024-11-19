@@ -10,6 +10,7 @@ import ar.edu.unlam.eventos.Empresa;
 import ar.edu.unlam.eventos.Evento;
 import ar.edu.unlam.eventos.Persona;
 import ar.edu.unlam.eventos.enums.Sala;
+import ar.edu.unlam.eventos.exceptions.ClienteYaExisteEnEventoException;
 import ar.edu.unlam.eventos.exceptions.CupoLlenoException;
 import ar.edu.unlam.eventos.exceptions.EventoDuplicadoException;
 import ar.edu.unlam.eventos.exceptions.EventoInexistenteException;
@@ -23,7 +24,7 @@ import ar.edu.unlam.eventos.interfaces.Participante;
 public class PruebaEventos {
 
 	@Test // #1
-	public void dadoQueExisteUnaEmpresaCuandoAgregoUnClienteObtengoUnResultadoExitoso() {
+	public void dadoQueExisteUnaEmpresaCuandoAgregoUnClienteObtengoUnResultadoExitoso() throws ClienteYaExisteEnEventoException {
 		// INICIO
 		Empresa empresa;
 		Cliente cliente;
@@ -86,7 +87,7 @@ public class PruebaEventos {
 	}
 
 	@Test // #4
-	public void dadoQueExisteUnaEmpresaConEventosCuandoVerificoSiUnClienteSeEncuentraEntreLosParticipantesDeUnEventoPorClienteYExisteObtengoUnResultadoPositivo() throws EventoDuplicadoException, EventoInexistenteException,CupoLlenoException, ParticipanteNoEsClienteException, ParticipanteNoPerteneceAlEventoException {
+	public void dadoQueExisteUnaEmpresaConEventosCuandoVerificoSiUnClienteSeEncuentraEntreLosParticipantesDeUnEventoPorClienteYExisteObtengoUnResultadoPositivo() throws EventoDuplicadoException, EventoInexistenteException,CupoLlenoException, ParticipanteNoEsClienteException, ParticipanteNoPerteneceAlEventoException, ClienteYaExisteEnEventoException {
 		// INICIO
 		Empresa empresa;
 		Cliente cliente;
@@ -110,12 +111,39 @@ public class PruebaEventos {
 
 		// VALIDACION
 		assertTrue(evento.buscarClienteEnEventoPorParticipante(participante));
+		assertTrue(empresa.getClientes().contains(participante));
+		assertTrue(((Evento) evento).getParticipantes().contains(cliente));
 	}
 
 	@Test // #5
-	public void dadoQueExisteUnaEmpresaConEventosCuandoAgregoUnClienteAUnEventoDondeExisteElClienteObtengoUnaClienteExistenteEnEventoException() {
+	(expected= ClienteYaExisteEnEventoException.class)
+	public void dadoQueExisteUnaEmpresaConEventosCuandoAgregoUnClienteAUnEventoDondeExisteElClienteObtengoUnaClienteExistenteEnEventoException() throws CupoLlenoException, ParticipanteNoEsClienteException, EventoDuplicadoException, ClienteYaExisteEnEventoException {
+		Empresa empresa;
+		Cliente cliente;
+		Participante participante;
+		Conferencia evento;
+		Integer cuit = 110202023, dni = 111111,cupoParticipantes=50;
+		String nombreEmpresa = "Janos", nombre = "jose", apellido = "Lopez", codigoEvento = "Conf001",
+				nombreEvento = "Marcianos";
+		LocalDate fechaEvento = LocalDate.of(2024, 12, 12);
+		Sala sala = Sala.GRANDE;
+		// PREPARACION
+		cliente =new Persona (dni,nombre,apellido);
+		participante = new Persona(dni, nombre, apellido);
+		evento = new Evento(codigoEvento, fechaEvento, nombreEvento, sala, (Persona) participante);
+		empresa = new Empresa(cuit, nombreEmpresa);
+		
+		evento.setCupoParticipantesConferencia(cupoParticipantes);
+		assertTrue(empresa.agregarEvento(evento));
+		assertTrue (empresa.agregarCliente((Persona) cliente));
+		assertTrue (evento.agregarParticipante(participante, empresa));
 
+		// VALIDACION
+		evento.agregarParticipante(participante, empresa);
 	}
+
+
+	
 
 	@Test // #6
 	public void dadoQueExisteUnaEmpresaConEventosCuandoAgregoUnClienteAUnTallerSinCupoDondeNoExisteElClienteObtengoUnResultadoFallido() {
