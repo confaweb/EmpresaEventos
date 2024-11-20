@@ -107,7 +107,7 @@ public class Empresa {
 		return "Empresa [cuit=" + cuit + ", nommbreEmpresa=" + nommbreEmpresa + "]";
 	}
 
-	public boolean agregarEvento(Conferencia evento) throws EventoDuplicadoException {
+	public boolean agregarEvento(Evento evento) throws EventoDuplicadoException {
 
 		Boolean eventoAgregado = listadoEventos.add((Evento) evento);
 		if (!eventoAgregado)

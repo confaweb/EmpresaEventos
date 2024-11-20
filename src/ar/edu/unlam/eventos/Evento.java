@@ -14,9 +14,10 @@ import ar.edu.unlam.eventos.exceptions.ParticipanteNoPerteneceAlEventoException;
 import ar.edu.unlam.eventos.interfaces.Cliente;
 import ar.edu.unlam.eventos.interfaces.Conferencia;
 import ar.edu.unlam.eventos.interfaces.Participante;
+import ar.edu.unlam.eventos.interfaces.Taller;
 
-public  class Evento implements Comparable<Evento>,Conferencia {
-	
+public class Evento implements Comparable<Evento>, Conferencia, Taller {
+
 	private Integer cupoParticipantes;
 	private Double precio;
 	private String codigoEvento;
@@ -24,16 +25,15 @@ public  class Evento implements Comparable<Evento>,Conferencia {
 	private String nombreEvento;
 	private Sala sala;
 	private Persona expositor;
-	private Set <Participante>participantes;
-	
+	private Set<Participante> participantes;
 
 	public Evento(String codigoEvento, LocalDate fechaEvento, String nombreEvento, Sala sala, Persona expositor) {
-		this.codigoEvento=codigoEvento;
-		this.fechaEvento=fechaEvento;
-		this.nombreEvento=nombreEvento;
-		this.sala=sala;
-		this.expositor=expositor;
-		this.participantes=new TreeSet<>();
+		this.codigoEvento = codigoEvento;
+		this.fechaEvento = fechaEvento;
+		this.nombreEvento = nombreEvento;
+		this.sala = sala;
+		this.expositor = expositor;
+		this.participantes = new TreeSet<>();
 	}
 
 	public String getCodigoEvento() {
@@ -83,15 +83,15 @@ public  class Evento implements Comparable<Evento>,Conferencia {
 	public void setParticipantes(Set<Participante> participantes) {
 		this.participantes = participantes;
 	}
+
 	public Integer getCupoParticipantes() {
 		return cupoParticipantes;
 	}
-	@ Override
+
+	@Override
 	public void setCupoParticipantesConferencia(Integer cupo) {
 		this.cupoParticipantes = cupo;
 	}
-
-	
 
 	/**
 	 * @return the precio
@@ -108,38 +108,60 @@ public  class Evento implements Comparable<Evento>,Conferencia {
 	}
 
 	@Override
-	public boolean agregarParticipante(Participante participante,Empresa empresa)
-			throws CupoLlenoException, ParticipanteNoEsClienteException, EventoDuplicadoException, ClienteYaExisteEnEventoException {
+	public boolean agregarParticipante(Participante participante, Empresa empresa) throws CupoLlenoException,
+			ParticipanteNoEsClienteException, EventoDuplicadoException, ClienteYaExisteEnEventoException {
+		Boolean participanteAgregado = false;
 		if (!(empresa.getClientes().contains(participante)))
 			throw new ParticipanteNoEsClienteException(
 					"Debe hacer cliente al participante para poder agregarlo al evento");
-		if(participantes.contains(participante))
+		if (participantes.contains(participante))
 			throw new ClienteYaExisteEnEventoException();
 
-		if (this.participantes.size() < this.cupoParticipantes&& empresa.getListadoEventos().contains(this)) {
-			Boolean participanteAgregado = this.participantes.add(participante);
+		if (this.participantes.size() < this.cupoParticipantes && empresa.getListadoEventos().contains(this)) {
+			participanteAgregado = this.participantes.add(participante);
 			return participanteAgregado;
 		}
-
+		if (this.participantes.size() >= this.cupoParticipantes) {
+			return participanteAgregado;
+		}
+		
 		throw new CupoLlenoException("Cupo lleno");
 
 	}
+
 	@Override
-	public boolean buscarClienteEnEventoPorParticipante(Participante participante) throws ParticipanteNoPerteneceAlEventoException {
+	public boolean buscarClienteEnEventoPorParticipante(Participante participante)
+			throws ParticipanteNoPerteneceAlEventoException {
 		Boolean participanteEncontrado = false;
 		if (!(participantes.contains(participante)))
 			throw new ParticipanteNoPerteneceAlEventoException();
-			
+
 		participanteEncontrado = true;
 
 		return participanteEncontrado;
 	}
+
 	@Override
-	public void setPrecioconferencia(Double precioConferencia) {
-		this.precio=precioConferencia;
-		
+	public Double calcularPrecioconferencia() {
+		Double precioConferencia;
+		precioConferencia = precio*this.participantes.size();
+		return precioConferencia;
+
 	}
 
+	@Override
+	public Double calcularPrecioTaller() {
+		Double precioTaller;
+		precioTaller = precio*this.participantes.size();
+		return precioTaller;
+
+	}
+
+	@Override
+	public void setCupoParticipantesTaller(Integer cupoTaller) {
+		this.cupoParticipantes = cupoTaller;
+
+	}
 
 	@Override
 	public int hashCode() {
@@ -163,11 +185,5 @@ public  class Evento implements Comparable<Evento>,Conferencia {
 		// TODO Auto-generated method stub
 		return this.getCodigoEvento().compareTo(evento.getCodigoEvento());
 	}
-
-	
-
-	
-	
-
 
 }
