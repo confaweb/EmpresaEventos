@@ -1,13 +1,16 @@
 package ar.edu.unlam.eventos;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import ar.edu.unlam.eventos.exceptions.ClienteYaExisteEnEventoException;
 import ar.edu.unlam.eventos.exceptions.EventoDuplicadoException;
 import ar.edu.unlam.eventos.exceptions.EventoInexistenteException;
+import ar.edu.unlam.eventos.interfaces.Cliente;
 import ar.edu.unlam.eventos.interfaces.Conferencia;
 
 public class Empresa {
@@ -16,12 +19,14 @@ public class Empresa {
 	private String nommbreEmpresa;
 	private Set<Persona> clientes;
 	private Set<Evento> listadoEventos;
+	private Map<Evento, TreeSet> listadoClientesPorEvento;
 
 	public Empresa(Integer cuit, String nombreEmpresa) {
 		this.cuit = cuit;
 		this.nommbreEmpresa = nombreEmpresa;
 		clientes = new TreeSet<Persona>();
 		listadoEventos = new HashSet<Evento>();
+		listadoClientesPorEvento=new TreeMap<Evento,TreeSet>();
 	}
 
 	public Integer getCuit() {
@@ -66,6 +71,20 @@ public class Empresa {
 	 */
 	public void setClientes(Set<Persona> clientes) {
 		this.clientes = clientes;
+	}
+
+	/**
+	 * @return the listadoClientesPorEvento
+	 */
+	public Map<Evento, TreeSet> getListadoClientesPorEvento() {
+		return listadoClientesPorEvento;
+	}
+
+	/**
+	 * @param listadoClientesPorEvento the listadoClientesPorEvento to set
+	 */
+	public void setListadoClientesPorEvento(Map<Evento, TreeSet> listadoClientesPorEvento) {
+		this.listadoClientesPorEvento = listadoClientesPorEvento;
 	}
 
 	public Boolean agregarCliente(Persona cliente)  {
@@ -113,6 +132,12 @@ public class Empresa {
 		if (!eventoAgregado)
 			throw new EventoDuplicadoException("El Evento ya existe");
 		return eventoAgregado;
+	}
+
+	public void listarPrticipantesPorAperllidoPorEvento(Evento evento) {
+		if (evento.getParticipantes().size()> 0)
+			this.listadoClientesPorEvento.put(evento, (TreeSet) evento.getParticipantes());
+		
 	}
 
 }

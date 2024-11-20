@@ -1,6 +1,8 @@
 package ar.edu.unlam.eventos;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
@@ -13,6 +15,7 @@ import ar.edu.unlam.eventos.exceptions.ParticipanteNoEsClienteException;
 import ar.edu.unlam.eventos.exceptions.ParticipanteNoPerteneceAlEventoException;
 import ar.edu.unlam.eventos.interfaces.Cliente;
 import ar.edu.unlam.eventos.interfaces.Conferencia;
+import ar.edu.unlam.eventos.interfaces.OrdenadosPorApellido;
 import ar.edu.unlam.eventos.interfaces.Participante;
 import ar.edu.unlam.eventos.interfaces.Taller;
 
@@ -76,8 +79,8 @@ public class Evento implements Comparable<Evento>, Conferencia, Taller {
 		this.expositor = expositor;
 	}
 
-	public Set<Participante> getParticipantes() {
-		return participantes;
+	public Collection<? extends Persona> getParticipantes() {
+		return (Collection<? extends Persona>) participantes;
 	}
 
 	public void setParticipantes(Set<Participante> participantes) {
@@ -185,5 +188,7 @@ public class Evento implements Comparable<Evento>, Conferencia, Taller {
 		// TODO Auto-generated method stub
 		return this.getCodigoEvento().compareTo(evento.getCodigoEvento());
 	}
+
+	
 
 }
