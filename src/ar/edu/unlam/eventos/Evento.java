@@ -79,8 +79,8 @@ public class Evento implements Comparable<Evento>, Conferencia, Taller {
 		this.expositor = expositor;
 	}
 
-	public Collection<? extends Persona> getParticipantes() {
-		return (Collection<? extends Persona>) participantes;
+	public<Participante> Set<Participante> getParticipantes() {
+		return (Set<Participante>) this.participantes;
 	}
 
 	public void setParticipantes(Set<Participante> participantes) {

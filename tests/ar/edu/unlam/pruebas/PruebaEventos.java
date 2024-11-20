@@ -394,7 +394,16 @@ public class PruebaEventos {
 		
 		assertEquals(arrayEvento3.get(0), participante8);// Apellidos:p7"Engels",p8"Castro",p9"Guevara",p10"Cienfuegos"
 		assertEquals(4, arrayEvento3.size());
+		
+		assertTrue(participanteEsInstanciaDePersona(participante));
 
+	}
+
+	private boolean participanteEsInstanciaDePersona(Persona participante) {
+		boolean esInstancia=false;
+		if (participante instanceof Persona)
+			esInstancia=true;
+		return esInstancia;
 	}
 
 	private void ordenarPorApellido(Evento evento, Set<Persona> listaOrdenadaPorApellido) {
@@ -402,8 +411,8 @@ public class PruebaEventos {
 
 	}
 
-	private void pasarParticipantesDeSetAArray(Evento evento, List<Persona> arrayEvento) {
-
-	}
+//	private void pasarParticipantesDeSetAArray(Evento evento, List<Persona> arrayEvento) {
+//
+//	}
 
 }
